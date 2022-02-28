@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("categorias")
+@RequestMapping("api/categorias")
 public class CategoriaRest {
 
     @Autowired

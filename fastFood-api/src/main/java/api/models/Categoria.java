@@ -43,4 +43,11 @@ public class Categoria {
         return Objects.hash(id);
     }
 
+    @Override
+    public String toString() {
+        return "Categoria{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                '}';
+    }
 }
