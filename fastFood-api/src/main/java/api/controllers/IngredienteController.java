@@ -43,6 +43,7 @@ public class IngredienteController {
       if (optionalIngrediente.isPresent()) {
          Ingrediente updateIngrediente = optionalIngrediente.get();
          updateIngrediente.setNombre(ingrediente.getNombre());
+         updateIngrediente.setStock(ingrediente.getStock());
          ingredienteRepository.save(updateIngrediente);
          return ResponseEntity.ok(updateIngrediente);
       } else {

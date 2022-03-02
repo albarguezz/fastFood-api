@@ -47,13 +47,13 @@ public class Ingrediente {
       this.stock = stock;
    }
 
-   public List<Producto> getProductos() {
+   /*public List<Producto> getProductos() {
       return productos;
    }
 
    public void setProductos(List<Producto> productos) {
       this.productos = productos;
-   }
+   }*/
 
    @Override
    public boolean equals(Object o) {
@@ -74,7 +74,6 @@ public class Ingrediente {
               "id=" + id +
               ", nombre='" + nombre + '\'' +
               ", stock=" + stock +
-              ", productos=" + productos +
               '}';
    }
 }

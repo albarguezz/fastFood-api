@@ -38,7 +38,7 @@ public class Producto {
    @ManyToMany(cascade = CascadeType.MERGE)
    private List<Ingrediente> ingredientes;
 
-   public void addIngrediente(Ingrediente ingrediente){
+   public void addIngredientes(Ingrediente ingrediente){
       if(this.ingredientes == null){
          this.ingredientes = new ArrayList<>();
       }
@@ -76,6 +76,14 @@ public class Producto {
 
    public void setPrecio(String precio) {
       this.precio = precio;
+   }
+
+   public List<Ingrediente> getIngredientes() {
+      return ingredientes;
+   }
+
+   public void setIngredientes(List<Ingrediente> ingredientes) {
+      this.ingredientes = ingredientes;
    }
 
    @Override
