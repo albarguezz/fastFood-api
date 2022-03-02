@@ -1,5 +1,6 @@
-package api.rest;
+package api.controllers;
 
+import api.exception.ResourceNotFoundException;
 import api.models.Categoria;
 import api.repositories.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/categorias")
-public class CategoriaRest {
+public class CategoriaController {
 
     @Autowired
     private CategoriaRepository categoriaRepository;
@@ -26,7 +27,7 @@ public class CategoriaRest {
     @RequestMapping(value = "{categoriaId}")
     public ResponseEntity<Categoria> getCategoriaById(@PathVariable("categoriaId") Long categoriaId) {
         Optional<Categoria> optionalCategoria = categoriaRepository.findById(categoriaId);
-        return optionalCategoria.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+        return optionalCategoria.map(ResponseEntity::ok).orElseThrow(() -> new ResourceNotFoundException("Categoria", "id", categoriaId));
     }
 
     @PostMapping

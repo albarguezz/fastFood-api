@@ -4,28 +4,31 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "repartidor")
-public class Repartidor {
-
+@Table(name="usuario")
+public class Usuario {
    @Id
    @Column(name = "id", nullable = false)
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @Column(name = "nombre", nullable = false, length = 50)
+   @Column(name = "nombre", nullable = false)
    private String nombre;
 
-   @Column(name = "email", nullable = false, length = 100)
+   @Column(name = "email", nullable = false)
    private String email;
 
-   @Column(name = "contraseña", nullable = false, length = 50)
-   private String contraseña;
+   @Column(name = "password", nullable = false)
+   private String password;
 
-   @Column(name = "direccion", length = 50)
+   @Column(name = "direccion", nullable = false)
    private String direccion;
 
-   @Column(name = "telefono", nullable = false)
-   private int telefono;
+   @Column(name = "telefono", nullable = true)
+   private String telefono;
+
+   @Column(name = "rol", nullable = false)
+   private String rol;
+
 
    public Long getId() {
       return id;
@@ -51,12 +54,12 @@ public class Repartidor {
       this.email = email;
    }
 
-   public String getContraseña() {
-      return contraseña;
+   public String getPassword() {
+      return password;
    }
 
-   public void setContraseña(String contraseña) {
-      this.contraseña = contraseña;
+   public void setPassword(String password) {
+      this.password = password;
    }
 
    public String getDireccion() {
@@ -67,36 +70,45 @@ public class Repartidor {
       this.direccion = direccion;
    }
 
-   public int getTelefono() {
+   public String getTelefono() {
       return telefono;
    }
 
-   public void setTelefono(int telefono) {
+   public void setTelefono(String telefono) {
       this.telefono = telefono;
+   }
+
+   public String getRol() {
+      return rol;
+   }
+
+   public void setRol(String rol) {
+      this.rol = rol;
    }
 
    @Override
    public boolean equals(Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
-      Repartidor that = (Repartidor) o;
-      return telefono == that.telefono && Objects.equals(id, that.id) && Objects.equals(nombre, that.nombre) && Objects.equals(email, that.email) && Objects.equals(contraseña, that.contraseña) && Objects.equals(direccion, that.direccion);
+      Usuario usuario = (Usuario) o;
+      return id.equals(usuario.id) && Objects.equals(email, usuario.email);
    }
 
    @Override
    public int hashCode() {
-      return Objects.hash(id, nombre, email, contraseña, direccion, telefono);
+      return Objects.hash(id, email);
    }
 
    @Override
    public String toString() {
-      return "Repartidor{" +
+      return "Usuario{" +
               "id=" + id +
               ", nombre='" + nombre + '\'' +
               ", email='" + email + '\'' +
-              ", contraseña='" + contraseña + '\'' +
+              ", password='" + password + '\'' +
               ", direccion='" + direccion + '\'' +
-              ", telefono=" + telefono +
+              ", telefono='" + telefono + '\'' +
+              ", rol='" + rol + '\'' +
               '}';
    }
 }
