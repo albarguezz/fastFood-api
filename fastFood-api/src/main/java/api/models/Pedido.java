@@ -18,6 +18,10 @@ public class Pedido {
    @Column(name = "precio_total", nullable = false)
    private float precioTotal;
 
+   @JoinColumn(name = "usuario", nullable = false)
+   @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   private Usuario usuario;
+
 
    @JoinTable(
            name = "producto_pedido",

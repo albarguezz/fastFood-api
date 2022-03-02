@@ -1,6 +1,7 @@
 package api.models;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -28,6 +29,9 @@ public class Usuario {
 
    @Column(name = "rol", nullable = false)
    private String rol;
+
+   @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+   private List<Pedido> pedidos;
 
 
    public Long getId() {
