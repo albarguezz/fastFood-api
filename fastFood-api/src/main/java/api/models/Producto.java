@@ -24,6 +24,9 @@ public class Producto {
    @Column(name = "precio", nullable = false, length = 50)
    private String precio;
 
+   @Column(name = "disponibilidad", nullable = false, length = 50)
+   private String disponibilidad;
+
    @ManyToMany(mappedBy = "productos")
    private List<Pedido> pedidos;
 
@@ -78,6 +81,10 @@ public class Producto {
       this.precio = precio;
    }
 
+   public String getDisponibilidad() { return this.disponibilidad; }
+
+   public void setDisponibilidad(String disponibilidad) { this.disponibilidad = disponibilidad; }
+
    public List<Ingrediente> getIngredientes() {
       return ingredientes;
    }
@@ -101,11 +108,12 @@ public class Producto {
 
    @Override
    public String toString() {
-      return "Producto{" +
+      return "Producto {" +
               "id=" + id +
               ", nombre='" + nombre + '\'' +
               ", categoria=" + categoria +
               ", precio='" + precio + '\'' +
+              ", disponibilidad='" + disponibilidad + '\'' +
               '}';
    }
 }

@@ -1,7 +1,9 @@
 package api.controllers;
 
 import api.exception.ResourceNotFoundException;
+import api.models.Ingrediente;
 import api.models.Producto;
+import api.repositories.IngredienteRepository;
 import api.repositories.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ public class ProductoController {
 
    @Autowired
    private ProductoRepository productoRepository;
+   @Autowired
+   private IngredienteRepository ingredienteRepository;
 
    @GetMapping
    public ResponseEntity<List<Producto>> getProductos() {
@@ -54,6 +58,6 @@ public class ProductoController {
 
    @DeleteMapping(value = "{productoId}")
    public void deleteProducto(@PathVariable("productoId") Long productoId) {
-      productoRepository.deleteById(productoId);
+         productoRepository.deleteById(productoId);
    }
 }
