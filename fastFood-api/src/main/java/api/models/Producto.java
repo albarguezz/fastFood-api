@@ -27,6 +27,7 @@ public class Producto {
    @Column(name = "disponibilidad", nullable = false, length = 50)
    private String disponibilidad;
 
+
    @ManyToMany(mappedBy = "productos")
    private List<Pedido> pedidos;
 

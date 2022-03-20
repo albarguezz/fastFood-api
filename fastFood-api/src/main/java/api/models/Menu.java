@@ -19,6 +19,12 @@ public class Menu {
    @Column(name = "precio")
    private float precio;
 
+   @Column(name = "descripcion", nullable = true, length = 255)
+   private String descripcion;
+
+   @Column(name = "disponibilidad", nullable = true, length = 255)
+   private String disponibilidad;
+
    @JoinTable(
            name = "menu_producto",
            joinColumns = @JoinColumn(name = "menu_fk", nullable = false),
@@ -38,6 +44,14 @@ public class Menu {
    @ManyToMany(mappedBy = "menus")
    private List<Pedido> pedidos;
 
+
+   public String getDescripcion() {
+      return descripcion;
+   }
+
+   public void setDescripcion(String descripcion) {
+      this.descripcion = descripcion;
+   }
 
    public Long getId() {
       return id;
@@ -69,6 +83,14 @@ public class Menu {
 
    public void setProductos(List<Producto> productos) {
       this.productos = productos;
+   }
+
+   public String getDisponibilidad() {
+      return disponibilidad;
+   }
+
+   public void setDisponibilidad(String disponibilidad) {
+      this.disponibilidad = disponibilidad;
    }
 
    @Override

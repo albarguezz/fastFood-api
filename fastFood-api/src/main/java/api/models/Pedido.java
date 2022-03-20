@@ -92,4 +92,12 @@ public class Pedido {
    public void setMenus(List<Menu> menus) {
       this.menus = menus;
    }
+
+   public Usuario getUsuario() {
+      return usuario;
+   }
+
+   public void setUsuario(Usuario usuario) {
+      this.usuario = usuario;
+   }
 }

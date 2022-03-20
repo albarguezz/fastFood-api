@@ -14,6 +14,10 @@ public class Categoria {
     @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
 
+    @Column(name = "descripcion", nullable = true, length = 255)
+    private String descripcion;
+
+
     public Long getId() {
         return id;
     }
@@ -28,6 +32,14 @@ public class Categoria {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     @Override

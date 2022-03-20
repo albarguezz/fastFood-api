@@ -2,16 +2,19 @@ package api.controllers;
 
 import api.exception.ResourceNotFoundException;
 import api.models.Menu;
-import api.models.Producto;
 import api.repositories.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("api/menus")
 public class MenuController {
 
@@ -36,17 +39,40 @@ public class MenuController {
       return ResponseEntity.ok(newMenu);
    }
 
-   @PutMapping
-   public ResponseEntity<Menu> updateMenu(@RequestBody Menu menu) {
-      Optional<Menu> optionalMenu = menuRepository.findById(menu.getId());
-      if (optionalMenu.isPresent()) {
-         Menu updateMenu = optionalMenu.get();
-         updateMenu.setNombre(menu.getNombre());
-         updateMenu.setPrecio(menu.getPrecio());
-         updateMenu.setProductos(menu.getProductos());
-         menuRepository.save(updateMenu);
-         return ResponseEntity.ok(updateMenu);
-      } else {
+   @PutMapping(value = "{id}")
+   public ResponseEntity<List<Menu>> updateMenu(@PathVariable(value = "id") Long menuId, @RequestBody Menu menuUpdate) {
+      Menu menu = menuRepository.findById(menuId)
+              .orElseThrow(() -> new ResourceNotFoundException("Menu not found for this id :: " + menuId));
+      try {
+         menu.setNombre(menuUpdate.getNombre());
+         menu.setPrecio(menuUpdate.getPrecio());
+         menu.setProductos(menuUpdate.getProductos());
+         menu.setDescripcion(menuUpdate.getDescripcion());
+         menu.setDisponibilidad(menuUpdate.getDisponibilidad());
+         menuRepository.save(menu);
+         List<Menu> menus = menuRepository.findAll();
+         return ResponseEntity.ok(menus);
+      } catch (Exception e) {
+         return ResponseEntity.notFound().build();
+      }
+   }
+
+   @RequestMapping(value = "actualizar/{id}", method = RequestMethod.PATCH)
+   public ResponseEntity<Menu> saveManager(@PathVariable(value = "id") Long menuId, @RequestBody Map<String, Object> fields) {
+      Menu menu = menuRepository.findById(menuId)
+              .orElseThrow(() -> new ResourceNotFoundException("Usuario not found for this id :: " + menuId));
+      try {
+         // Map key is field name, v is value
+         fields.forEach((k, v) -> {
+            // use reflection to get field k on manager and set it to value v
+            Field field = ReflectionUtils.findField(Menu.class, k);
+            assert field != null;
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, menu, v);
+         });
+         menuRepository.save(menu);
+         return ResponseEntity.ok(menu);
+      } catch (Exception e) {
          return ResponseEntity.notFound().build();
       }
    }
