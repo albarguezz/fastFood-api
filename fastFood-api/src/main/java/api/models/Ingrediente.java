@@ -19,7 +19,7 @@ public class Ingrediente {
    private int stock;
 
 
-   @ManyToMany(mappedBy = "ingredientes")
+   @ManyToMany(mappedBy = "ingredientes", cascade = CascadeType.REMOVE)
    private List<Producto> productos;
 
    public Long getId() {

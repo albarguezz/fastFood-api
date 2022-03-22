@@ -1,6 +1,7 @@
 package api.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,9 +31,14 @@ public class Usuario {
    @Column(name = "rol", nullable = false)
    private String rol;
 
-   @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+   @OneToMany(cascade = CascadeType.MERGE)
    private List<Pedido> pedidos;
-
+   public void addPedidos(Pedido pedido){
+      if(this.pedidos == null){
+         this.pedidos = new ArrayList<>();
+      }
+      this.pedidos.add(pedido);
+   }
 
    public Long getId() {
       return id;

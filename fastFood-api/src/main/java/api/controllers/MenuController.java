@@ -78,7 +78,7 @@ public class MenuController {
    }
 
    @DeleteMapping(value = "{menuId}")
-   public void deleteProducto(@PathVariable("productoId") Long menuId) {
+   public void deleteProducto(@PathVariable("menuId") Long menuId) {
       menuRepository.deleteById(menuId);
    }
 }

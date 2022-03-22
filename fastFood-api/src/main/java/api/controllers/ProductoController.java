@@ -29,11 +29,24 @@ public class ProductoController {
 
 
    @GetMapping
-   public ResponseEntity<List<Producto>> getProductos(@RequestParam(name = "categoria", required = false) Long categoriaId) {
+   public ResponseEntity<List<Producto>> getProductos() {
       List<Producto> productos = productoRepository.findAll();
-      return ResponseEntity.ok(productos);
+      try {
+         for (Producto p: productos) {
+            if (p.getIngredientes().size() > 0) {
+               for (Ingrediente i: p.getIngredientes()) {
+                  if(i.getStock() == 0) {
+                     p.setDisponibilidad("sin stock");
+                  }
+               }
+               productoRepository.save(p);
+            }
+         }
+         return ResponseEntity.ok(productos);
+      } catch (Exception e) {
+         return ResponseEntity.internalServerError().build();
+      }
    }
-
 
    @RequestMapping(value = "{productoId}")
    public ResponseEntity<Producto> getProductoById(@PathVariable("productoId") Long productoId) {
@@ -43,8 +56,13 @@ public class ProductoController {
 
    @PostMapping
    public ResponseEntity<Producto> createProducto(@RequestBody Producto producto) {
-      Producto newProducto = productoRepository.save(producto);
-      return ResponseEntity.ok(newProducto);
+      try {
+         Producto newProducto = productoRepository.save(producto);
+         return ResponseEntity.ok(newProducto);
+      } catch (Exception e) {
+         System.out.println(e);
+         return ResponseEntity.badRequest().build();
+      }
    }
 
    @PutMapping(value = "{id}")

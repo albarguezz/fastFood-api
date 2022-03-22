@@ -1,9 +1,15 @@
 package api.controllers;
 
 import api.exception.ResourceNotFoundException;
+import api.models.Ingrediente;
+import api.models.Menu;
 import api.models.Pedido;
+import api.models.Producto;
+import api.repositories.IngredienteRepository;
+import api.repositories.MenuRepository;
 import api.repositories.PedidoRepository;
 
+import api.repositories.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
@@ -22,6 +28,12 @@ public class PedidoController {
 
    @Autowired
    private PedidoRepository pedidoRepository;
+   @Autowired
+   private IngredienteRepository ingredienteRepository;
+   @Autowired
+   private ProductoRepository productoRepository;
+   @Autowired
+   private MenuRepository menuRepository;
 
    @GetMapping
    public ResponseEntity<List<Pedido>> getPedidos() {
@@ -37,8 +49,51 @@ public class PedidoController {
 
    @PostMapping
    public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido) {
-      Pedido newPedido = pedidoRepository.save(pedido);
-      return ResponseEntity.ok(newPedido);
+      try {
+         Pedido newPedido = pedidoRepository.save(pedido);
+         if(newPedido.getProductos().size() > 0) {
+            for (Producto p: newPedido.getProductos()) {
+               Optional<Producto> optionalProducto = productoRepository.findById(p.getId());
+               if (optionalProducto.isPresent()) {
+                  Producto product = optionalProducto.get();
+                  for (Ingrediente i: product.getIngredientes()) {
+                     if (i.getStock() > 0) {
+                        i.setStock(i.getStock()-1);
+                        ingredienteRepository.save(i);
+                     } else {
+                        p.setDisponibilidad("sin stock");
+                        productoRepository.save(p);
+                        System.out.println("No hay stock de este ingrediente" + i.getNombre());
+                     }
+                  }
+               }
+            }
+         }
+         if (newPedido.getMenus().size() > 0) {
+            for (Menu m: newPedido.getMenus()) {
+               Optional<Menu> optionalMenu = menuRepository.findById(m.getId());
+               if (optionalMenu.isPresent()) {
+                  Menu menu = optionalMenu.get();
+                  for (Producto p: menu.getProductos()) {
+                     for (Ingrediente i: p.getIngredientes()) {
+                        if (i.getStock() > 0) {
+                           i.setStock(i.getStock()-1);
+                           ingredienteRepository.save(i);
+                        } else {
+                           p.setDisponibilidad("sin stock");
+                           productoRepository.save(p);
+                           System.out.println("No hay stock de este ingrediente" + i.getNombre());
+                        }
+                     }
+                  }
+               }
+            }
+         }
+         return ResponseEntity.ok(newPedido);
+      } catch (Exception e) {
+         System.out.println(e);
+         return ResponseEntity.badRequest().build();
+      }
    }
 
    @PutMapping(value = "{id}")
@@ -104,5 +159,4 @@ public class PedidoController {
    public void deletePedido(@PathVariable("pedidoId") Long pedidoId) {
       pedidoRepository.deleteById(pedidoId);
    }
-
 }

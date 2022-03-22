@@ -19,7 +19,7 @@ public class Pedido {
    private float precioTotal;
 
    @JoinColumn(name = "usuario", nullable = false)
-   @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   @ManyToOne(optional = false, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
    private Usuario usuario;
 
 
