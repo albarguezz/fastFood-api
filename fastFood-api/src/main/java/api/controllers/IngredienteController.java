@@ -24,24 +24,40 @@ public class IngredienteController {
    @Autowired
    private IngredienteRepository ingredienteRepository;
 
+   /**
+    * Funcion que realiza el get y devuelve json con todos los ingredientes
+    * @return listado de ingredietes
+    */
    @GetMapping
    public ResponseEntity<List<Ingrediente>> getIngredientes() {
       List<Ingrediente> ingredientes = ingredienteRepository.findAll();
       return ResponseEntity.ok(ingredientes);
    }
 
+   /**
+    * Funcion que realiza el get pasandole un id por parametro y devuelve json con el ingredinte que tenga ese id
+    * @return listado de ingredietes
+    */
    @RequestMapping(value = "{ingredieteId}")
    public ResponseEntity<Ingrediente> getIngredienteById(@PathVariable("ingredieteId") Long ingredieteId) {
       Optional<Ingrediente> optionalIngrediente = ingredienteRepository.findById(ingredieteId);
       return optionalIngrediente.map(ResponseEntity::ok).orElseThrow(() -> new ResourceNotFoundException("Ingrediente", "id", ingredieteId));
    }
 
+   /**
+    * Funcion que realiza el POST de un ingrediente
+    * @return devuelve el ingrediente
+    */
    @PostMapping
    public ResponseEntity<Ingrediente> createIngrediente(@Valid @RequestBody Ingrediente ingrediente) {
       Ingrediente newIngrediente = ingredienteRepository.save(ingrediente);
       return ResponseEntity.ok(newIngrediente);
    }
 
+   /**
+    * Funcion que realiza el put pasandole un id por parametro
+    * @return listado de ingredietes
+    */
    @PutMapping(value = "{ingredienteId}")
    public ResponseEntity<List<Ingrediente>> updateIngrediente(@PathVariable(value = "ingredienteId") Long ingredienteId,
                                               @Valid @RequestBody Ingrediente ingredienteUpdate) throws ResourceNotFoundException {
@@ -58,6 +74,10 @@ public class IngredienteController {
       }
    }
 
+   /**
+    * Funcion que realiza el PATCH pasandole un id por parametro
+    * @return listado de ingredietes
+    */
    @RequestMapping(value = "actualizar/{id}", method = RequestMethod.PATCH)
    public ResponseEntity<Ingrediente> saveManager(@PathVariable(value = "id") Long ingredienteId, @RequestBody Map<String, Object> fields) {
       Ingrediente ingrediente = ingredienteRepository.findById(ingredienteId)
@@ -78,6 +98,9 @@ public class IngredienteController {
       }
    }
 
+   /**
+    * Funcion que realiza el delete pasandole un id por parametro
+    */
    @DeleteMapping(value = "{ingredienteId}")
    public void deleteIngrediente(@PathVariable("ingredienteId") Long ingredienteId) {
       ingredienteRepository.deleteById(ingredienteId);

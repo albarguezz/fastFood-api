@@ -27,6 +27,9 @@ public class Producto {
    @Column(name = "disponibilidad", nullable = false, length = 50)
    private String disponibilidad;
 
+   @Lob
+   @Column(name = "imagen", nullable = true)
+   private byte[] img;
 
    @ManyToMany(mappedBy = "productos")
    private List<Pedido> pedidos;
@@ -92,6 +95,14 @@ public class Producto {
 
    public void setIngredientes(List<Ingrediente> ingredientes) {
       this.ingredientes = ingredientes;
+   }
+
+   public byte[] getImg() {
+      return img;
+   }
+
+   public void setImg(byte[] img) {
+      this.img = img;
    }
 
    @Override

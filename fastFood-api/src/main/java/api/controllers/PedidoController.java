@@ -35,18 +35,31 @@ public class PedidoController {
    @Autowired
    private MenuRepository menuRepository;
 
+   /**
+    * Funcion que realiza el get y te devuelve lista de pedidos
+    * @return pedido
+    */
    @GetMapping
    public ResponseEntity<List<Pedido>> getPedidos() {
       List<Pedido> pedidos = pedidoRepository.findAll();
       return ResponseEntity.ok(pedidos);
    }
 
+   /**
+    * Funcion que realiza el get de un pedido pasandoele el id
+    * @return pedido
+    */
   @RequestMapping(value = "{pedidoId}")
    public ResponseEntity<Pedido> getPedidoById(@PathVariable("pedidoId") Long pedidoId) {
       Optional<Pedido> optionalPedido = pedidoRepository.findById(pedidoId);
       return optionalPedido.map(ResponseEntity::ok).orElseThrow(() -> new ResourceNotFoundException("Pedido", "id", pedidoId));
    }
 
+   /**
+    * Funcion que realiza el post es decir creacion de un pedido y que a mayores cuando el usuario realiza un pedido
+    * un pedido recorre la lista de productos de ese pedido y la de menus y resta 1 del stock de cada ingrediente usado para elaborar el producto
+    * @return listado de ingredietes
+    */
    @PostMapping
    public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido) {
       try {
@@ -96,6 +109,10 @@ public class PedidoController {
       }
    }
 
+   /**
+    * Funcion que realiza el post es decir creacion de un pedido y que a mayores cuando el usuario realiza un pedido
+    * @return listado de ingredietes
+    */
    @PutMapping(value = "{id}")
    public ResponseEntity<Pedido> updatePedido(@PathVariable(value = "id") Long pedidoId,
                                               @Valid @RequestBody Pedido pedidoDetails) throws ResourceNotFoundException {
@@ -135,6 +152,10 @@ public class PedidoController {
       }
    }
 
+   /**
+    * Funcion que realiza el patch de un pedido
+    * @return listado de ingredietes
+    */
    @RequestMapping(value = "actualizar/{id}", method = RequestMethod.PATCH)
    public ResponseEntity<Pedido> saveManager(@PathVariable(value = "id") Long pedidoId, @RequestBody Map<String, Object> fields) {
       Pedido pedido = pedidoRepository.findById(pedidoId)
@@ -155,6 +176,9 @@ public class PedidoController {
       }
    }
 
+   /**
+    * Funcion que realiza el delete de un pedido
+    */
    @DeleteMapping(value = "{pedidoId}")
    public void deletePedido(@PathVariable("pedidoId") Long pedidoId) {
       pedidoRepository.deleteById(pedidoId);

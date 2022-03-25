@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -103,6 +104,10 @@ public class ProductoController {
       }
    }
 
+   /**
+    * Funcion que realiza el delete de usuario
+    * @param productoId
+    */
    @DeleteMapping(value = "{productoId}")
    public void deleteProducto(@PathVariable("productoId") Long productoId) {
          productoRepository.deleteById(productoId);
